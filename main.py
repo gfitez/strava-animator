@@ -39,14 +39,14 @@ MIN_DATE=dt.datetime(2022,12,31).date()
 ZOOM_LEVEL=14
 
 DARK_MAP=True
-SIGMA=2#size of the trail
+SIGMA=3#size of the trail
 HEATMAP=False
 MARGIN_SIZE=32#in pixels
 PLT_COLORMAP = 'plasma' # matplotlib color map
 SHOW_LEAD=True
 SHOW_MILEAGE=True
 
-NUM_FRAMES=500
+NUM_FRAMES=2000
 
 
 def deg2xy(lat_deg: float, lon_deg: float, zoom: int) -> tuple[float, float]:
@@ -282,10 +282,11 @@ activities["showPoint"]=activities["angleSequential"]*0.9
 
 
 #Calculate distance total, ordered by our showPoint
-activities=activities.sort_values("showPoint")
+activities=activities.sort_values("datetime")
 shiftLat=activities.lat.shift()
 shiftLon=activities.lon.shift()
 activities["newDist"]=distance(shiftLat,shiftLon,activities.lat,activities.lon)
+activities=activities.sort_values("showPoint")
 activities["distTotal"]=np.cumsum(activities.newDist)
 activities.loc[activities.distTotal.isna(),"distTotal"]=0
 
@@ -423,7 +424,7 @@ for frameI,progress in tqdm(list(enumerate(np.linspace(0,1,NUM_FRAMES))),desc="G
         totalDist=df["distTotal"].max()
         if(math.isnan(totalDist)):
             totalDist=0
-        putCenterBottomAlignedText(str(round(totalDist,1))+"mi",frame.shape[0]/2*0.9,frame.shape[1],3,(0.5,0.5,0),5)
+        putCenterBottomAlignedText(format(totalDist,'.1f')+"mi",frame.shape[0]/2*0.9,frame.shape[1],3,(0.5,0.5,0),5)
 
     plt.imsave(f"{FRAME_DIR}/img-{frameI}.jpg",frame)
 
