@@ -44,9 +44,9 @@ HEATMAP=False
 MARGIN_SIZE=32#in pixels
 PLT_COLORMAP = 'plasma' # matplotlib color map
 SHOW_LEAD=True
-SHOW_MILEAGE=True
+SHOW_MILEAGE=False
 
-NUM_FRAMES=2000
+NUM_FRAMES=800
 
 
 def deg2xy(lat_deg: float, lon_deg: float, zoom: int) -> tuple[float, float]:
@@ -276,7 +276,7 @@ activities["angleSequential"]=activities.angleRank/activities.angleRank.max()+ac
 
 
 
-activities["showPoint"]=activities["angleSequential"]*0.9
+activities["showPoint"]=activities["percComplete"]*0.9
 
 
 
@@ -320,7 +320,7 @@ for frameI,progress in tqdm(list(enumerate(np.linspace(0,1,NUM_FRAMES))),desc="G
 
             timeSinceAppeared=(progress-showPoint)
 
-            colorVal=1-min(timeSinceAppeared*40,0.90)
+            colorVal=1-min(timeSinceAppeared*15,0.90)
             #colorVal=min(timeSinceAppeared*10,1)
 
             area=data[i-SIGMA:i+SIGMA, j-SIGMA:j+SIGMA]
@@ -428,4 +428,10 @@ for frameI,progress in tqdm(list(enumerate(np.linspace(0,1,NUM_FRAMES))),desc="G
 
     plt.imsave(f"{FRAME_DIR}/img-{frameI}.jpg",frame)
 
+
+#make video
 #ffmpeg -framerate 30 -i frames/img-%d.jpg -c:v libx264 -r 30 -vf "crop=trunc(iw/2)*2:trunc(ih/2)*2" output.mp4
+
+
+#mp4 to gif
+##ffmpeg -i output.mp4 output.gif

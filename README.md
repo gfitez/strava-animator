@@ -1,13 +1,27 @@
 # Strava animated heatmap generator
 
+<details>
+<summary><a>Example 1</a></summary>
+<img src="readme_files/example.gif" alt="drawing" width="300"/>
+</details>
+
+
+<details>
+<summary><a>Example 2</a></summary>
+<img src="readme_files/example2.gif" alt="drawing" width="300"/>
+</details>
+
 ## How to
 
 ### Step 1: Downloads
 A. Clone or download this repository. 
 
+B. `cd` into the directory and create and activate the virtual enviroment: `python3 -m venv env` followed by `source env/bin/activate` 
+
 B. Install the requirements with `pip install -r requirements.txt`
 
 C. Request and download data archive from Strava. Unzip and copy the folder into the same directory as this readme.
+<a href="https://support.strava.com/hc/en-us/articles/216918437-Exporting-your-Data-and-Bulk-Export#:~:text=Choose%20%22Settings%2C%22%20then%20find,may%20take%20a%20few%20hours.)">Instructions here</a>
 
 ### Step 2: Process strava files
 
@@ -29,14 +43,14 @@ Next, edit this function to choose which activities to include in the output.
 def activityFilter(info):
     ...
 ```
-You can do additional filtering later, but this function lets you do basic like selecting a date range or a specific activity type in order to speed up the program later. The full row of metadata available for filtering can be found in the `activities.csv` file 
+You can do additional filtering later, but this function lets you do basic like selecting a date range or a specific activity type in order to reduce the amount of data in later steps. The full row of metadata available for filtering can be found in the `activities.csv` file 
 
 Finally, run `python process_files.py`.
 
 ### 3. Generate Video frames
 This function will generate a dataframe of trackpoints from the processed gpx files, download map tiles from openstreetmap.org and generate a series of frames to be converted into video.
 
-To speed up processing the openstreetmap frames and trackpoint dataframe are saved. To regenerate this data, you can just the files (`frames/*` and `extractedData.pickle`) them and re-run the main file.
+To speed up processing the openstreetmap frames and trackpoint dataframe are saved locally. To regenerate this data, you can delet just the files (`tiles/*` or `extractedData.pickle`) and re-run the main file.
 
 Edit the activity filters in these lines:
 ```python
