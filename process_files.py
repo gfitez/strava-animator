@@ -24,12 +24,15 @@ ACTIVITY_METADATA="export/activities.csv" #Location of the file metadata
 def activityFilter(info):
     activityType=info["Activity Type"].values[0]
     dateStr=info["Activity Date"].values[0]
+    activityDesc=info["Activity Description"].values[0]
 
     datetime = dt.datetime.strptime(dateStr, "%b %d, %Y, %I:%M:%S %p")
 
     if activityType != "Run":
         return False
     if datetime.year<2022:
+        return False
+    if activityDesc=="":
         return False
     
     return True

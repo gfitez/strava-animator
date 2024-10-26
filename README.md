@@ -1,5 +1,6 @@
-# Strava animated heatmap generator
+# Strava activity animator
 
+This program will generate animated gifs/videos from location data of gpx and fit files exported from Strava.
 <details>
 <summary><a>Example 1</a></summary>
 <img src="readme_files/example.gif" alt="drawing" width="300"/>
@@ -11,10 +12,18 @@
 <img src="readme_files/example2.gif" alt="drawing" width="300"/>
 </details>
 
+<details>
+<summary><a>Example 3</a></summary>
+<img src="readme_files/example3.gif" alt="drawing" width="300"/>
+</details>
+
+
+
 ## How to
 
 ### Step 1: Downloads
 A. Clone or download this repository. 
+ - Use `git clone https://github.com/gfitez/strava-animator` or just download manually from https://github.com/gfitez/strava-animator
 
 B. `cd` into the directory and create and activate the virtual enviroment: `python3 -m venv env` followed by `source env/bin/activate` 
 
@@ -48,9 +57,9 @@ You can do additional filtering later, but this function lets you do basic like 
 Finally, run `python process_files.py`.
 
 ### 3. Generate Video frames
-This function will generate a dataframe of trackpoints from the processed gpx files, download map tiles from openstreetmap.org and generate a series of frames to be converted into video.
+The file `main.py` will generate a dataframe of trackpoints from the processed gpx files, download map tiles from openstreetmap.org and generate a series of frames to be converted into video.
 
-To speed up processing the openstreetmap frames and trackpoint dataframe are saved locally. To regenerate this data, you can delet just the files (`tiles/*` or `extractedData.pickle`) and re-run the main file.
+To speed up processing the openstreetmap frames and trackpoint dataframe are saved locally. If you ever want to regenerate this data, you can delete the files (`tiles/*` or `extractedData.pickle`) and re-run the main file.
 
 Edit the activity filters in these lines:
 ```python
@@ -60,6 +69,8 @@ MIN_START_LON=-72.93
 MAX_START_LON=-72.92
 MIN_DATE=dt.datetime(2022,6,1).date()
 ```
+HINT: You can find the latitude and longitude of places on google maps by dropping a pin.
+
 You can do more filtering by editing 
 ```def processActivity(gpx):```
 
@@ -75,7 +86,7 @@ PLT_COLORMAP = 'hot' # matplotlib color map
 SHOW_LEAD=True
 ```
 
-`ZOOM LEVEL` is an important constant to play with in order to make sure that the output images are of the correct size. (This will depend on the size of the physical area over which your activities occur.)
+`ZOOM LEVEL` is an important constant to play with. If the image output is too small, increase the value. If the output is too large or the program is downloading too many map tiles, decrease the value. (This will depend on the size of the physical area over which your activities occur.)
 
 One important parameter is the line defining `activities["showPoint"]`. This column should be a float between 0 and 1 representing when a specific gpx point should become visible in the animation. e.g. a `showPoint=0.5` will cause that specific trackpoint to become visible halfway through the animation
  
@@ -87,4 +98,4 @@ You will need to install ffmpeg for this step.
 The command that worked for me is:  
 `ffmpeg -framerate 30 -i frames/img-%d.jpg -c:v libx264 -r 30 -vf "crop=trunc(iw/2)*2:trunc(ih/2)*2" output.mp4`
 
-
+If you want to convert the mp4 into a gif, you can do `ffmpeg -i output.mp4 output.gif`

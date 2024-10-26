@@ -19,7 +19,7 @@ import cv2
 
 
 
-USE_CACHED=True#whether to use our cached dataframe
+USE_CACHED=False#whether to use our cached dataframe
 
 CACHED_ACTIVITIES_FILE="extractedData.pickle"#file for cached dataframe
 INPUT_DIR='processed_files'#if not using cached dataframe, directory for gpx files
@@ -46,7 +46,7 @@ PLT_COLORMAP = 'plasma' # matplotlib color map
 SHOW_LEAD=True
 SHOW_MILEAGE=False
 
-NUM_FRAMES=800
+NUM_FRAMES=100
 
 
 def deg2xy(lat_deg: float, lon_deg: float, zoom: int) -> tuple[float, float]:
@@ -414,7 +414,7 @@ for frameI,progress in tqdm(list(enumerate(np.linspace(0,1,NUM_FRAMES))),desc="G
     
 
     if SHOW_MILEAGE:
-        def putCenterBottomAlignedText(text,x,y,fontScale,color,thickness,fontFace=cv2.FONT_HERSHEY_COMPLEX):
+        def putCenterBottomAlignedText(text,x,y,fontScale,color,thickness,fontFace=cv2.FONT_HERSHEY_TRIPLEX):
             global frame
             text_width, text_height = cv2.getTextSize(str(text), fontFace, fontScale, thickness)[0]
 
